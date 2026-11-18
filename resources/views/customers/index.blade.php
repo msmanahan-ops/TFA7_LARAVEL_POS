@@ -24,15 +24,31 @@
             <tbody>
                 @forelse ($customers as $customer)
                     <tr>
-                        <td>{{ $customer->full_name }}</td>
-                        <td>{{ $customer->email }}</td>
-                        <td>{{ $customer->phone ?: '—' }}</td>
-                        <td>{{ $customer->address ?: '—' }}</td>
                         <td>
-                            <a href="{{ route('customers.edit', $customer) }}">
-                                Edit
-                            </a>
-                        </td>
+    <a href="{{ route('customers.show', $customer) }}">
+        View
+    </a>
+
+    |
+
+    <a href="{{ route('customers.edit', $customer) }}">
+        Edit
+    </a>
+
+    <form
+        method="POST"
+        action="{{ route('customers.destroy', $customer) }}"
+        onsubmit="return confirm('Delete this customer?');"
+        style="display: inline;"
+    >
+        @csrf
+        @method('DELETE')
+
+        <button type="submit">
+            Delete
+        </button>
+    </form>
+</td>
                     </tr>
                 @empty
                     <tr>

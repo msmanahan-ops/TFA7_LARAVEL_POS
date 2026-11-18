@@ -1,13 +1,27 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 
-Route::resource('customers', CustomerController::class)
-    ->only(['index', 'create', 'store', 'edit', 'update']);
+Route::middleware('auth')->group(function () {
+    Route::view('/dashboard', 'home')->name('dashboard');
 
-Route::resource('users', UserController::class)
-    ->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::resource('customers', CustomerController::class);
+
+    Route::resource('users', UserController::class);
+
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

@@ -64,4 +64,17 @@ class CustomerController extends Controller
             'address' => ['nullable', 'string', 'max:255'],
         ]);
     }
+    public function show(Customer $customer)
+{
+    return view('customers.show', compact('customer'));
+}
+
+public function destroy(Customer $customer)
+{
+    $customer->delete();
+
+    return redirect()
+        ->route('customers.index')
+        ->with('success', 'Customer deleted successfully.');
+}
 }

@@ -25,26 +25,34 @@
                 @forelse ($users as $user)
                     <tr>
                         <td>
-                            <img
-                                class="avatar"
-                                src="{{ $user->avatar
-                                    ? asset('storage/' . $user->avatar)
-                                    : asset('images/avatar-placeholder.svg') }}"
-                                alt="Avatar of {{ $user->name }}"
-                                width="64"
-                                height="64"
-                            >
-                        </td>
+    <a href="{{ route('users.show', $user) }}">
+        View
+    </a>
 
-                        <td>{{ $user->username }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
+    |
 
-                        <td>
-                            <a href="{{ route('users.edit', $user) }}">
-                                Edit
-                            </a>
-                        </td>
+    <a href="{{ route('users.edit', $user) }}">
+        Edit
+    </a>
+
+    @if (auth()->id() !== $user->id)
+        <form
+            method="POST"
+            action="{{ route('users.destroy', $user) }}"
+            onsubmit="return confirm('Delete this user?');"
+            style="display: inline;"
+        >
+            @csrf
+            @method('DELETE')
+
+            <button type="submit">
+                Delete
+            </button>
+        </form>
+    @else
+        <span class="hint">Your account</span>
+    @endif
+</td>
                     </tr>
                 @empty
                     <tr>

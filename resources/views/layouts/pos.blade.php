@@ -98,10 +98,44 @@
 </head>
 <body>
     <nav>
-        <a href="{{ route('home') }}">Laravel POS</a>
-        <a href="{{ route('customers.index') }}">Customers</a>
-        <a href="{{ route('users.index') }}">User Accounts</a>
-    </nav>
+    <a href="{{ route('home') }}">Laravel POS</a>
+
+    @auth
+        <a href="{{ route('dashboard') }}">Dashboard</a>
+
+        <a href="{{ route('customers.index') }}">
+            Customers
+        </a>
+
+        <a href="{{ route('users.index') }}">
+            User Accounts
+        </a>
+
+        <a href="{{ route('profile.edit') }}">
+            My Profile
+        </a>
+
+        <span style="color: white; margin-right: 15px;">
+            Hello, {{ auth()->user()->name }}
+        </span>
+
+        <form
+            method="POST"
+            action="{{ route('logout') }}"
+            style="display: inline;"
+        >
+            @csrf
+
+            <button type="submit" style="margin: 0;">
+                Logout
+            </button>
+        </form>
+    @else
+        <a href="{{ route('login') }}">Login</a>
+
+        <a href="{{ route('register') }}">Register</a>
+    @endauth
+</nav>
 
     <main>
         @if (session('success'))

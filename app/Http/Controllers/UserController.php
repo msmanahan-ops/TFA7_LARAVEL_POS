@@ -161,4 +161,31 @@ class UserController extends Controller
             ],
         ]);
     }
+    public function show(User $user)
+{
+    return view('users.show', compact('user'));
+}
+
+public function destroy(Request $request, User $user)
+{
+    if ($request->user()->id === $user->id) {
+        return redirect()
+            ->route('users.index')
+            ->withErrors([
+                'account' => 'You cannot delete your own account here.',
+            ]);
+    }
+
+    $avatar = $user->avatar;
+
+    $user->delete();
+
+    if ($avatar) {
+        Storage::disk('public')->delete($avatar);
+    }
+
+    return redirect()
+        ->route('users.index')
+        ->with('success', 'User deleted successfully.');
+}
 }
